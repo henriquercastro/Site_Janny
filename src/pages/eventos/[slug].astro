@@ -1,0 +1,7 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection, render } from 'astro:content';
+export async function getStaticPaths(){const items=(await getCollection('eventos')).filter(i=>!i.data.draft); return items.map(i=>({params:{slug:i.id},props:{item:i}}));}
+const {item}=Astro.props; const {Content}=await render(item);
+---
+<BaseLayout title={`${item.data.title} — Janny Castro`}><section class="page-hero"><div class="container"><p class="eyebrow">Evento</p><h1 class="display">{item.data.title}</h1><p>{[item.data.institution,item.data.city,item.data.theme].filter(Boolean).join(' • ')}</p></div></section>{item.data.cover&&<div class="detail-cover"><img src={item.data.cover} alt="" /></div>}<section class="section" style="padding-top:30px"><div class="container prose"><Content /></div></section></BaseLayout>

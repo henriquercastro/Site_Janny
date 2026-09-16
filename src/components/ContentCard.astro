@@ -1,0 +1,12 @@
+---
+const { kicker, title, meta, image, href = '#', external = false } = Astro.props;
+---
+<article class="card">
+  {image && <a class="card-media" href={href} target={external ? '_blank' : undefined} rel={external ? 'noreferrer' : undefined}><img src={image} alt="" loading="lazy" /></a>}
+  <div class="card-body">
+    <div class="card-kicker">{kicker}</div>
+    <h3><a href={href} target={external ? '_blank' : undefined} rel={external ? 'noreferrer' : undefined}>{title}</a></h3>
+    {meta && <div class="card-meta">{meta}</div>}
+    <a class="card-link" href={href} target={external ? '_blank' : undefined} rel={external ? 'noreferrer' : undefined}>Ver mais →</a>
+  </div>
+</article>

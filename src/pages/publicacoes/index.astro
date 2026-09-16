@@ -1,0 +1,10 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ContentCard from '../../components/ContentCard.astro';
+import { getCollection } from 'astro:content';
+const items = (await getCollection('publicacoes')).filter(i => !i.data.draft);
+---
+<BaseLayout title="Publicações — Janny Castro">
+<section class="page-hero"><div class="container"><p class="eyebrow">Publicações</p><h1 class="display">Análises, artigos, livros e imprensa</h1><p>Conteúdos sobre regulação, compliance, riscos, governança, ESG, criptoativos e transformação do mercado financeiro.</p></div></section>
+<section class="section"><div class="container"><div class="filter-row"><span class="filter">Todos</span><span class="filter">Compliance</span><span class="filter">Riscos</span><span class="filter">Governança</span><span class="filter">ESG</span><span class="filter">Criptoativos</span></div><div class="archive-grid">{items.map(item => <ContentCard kicker={item.data.type || item.data.category || 'Publicação'} title={item.data.title} meta={[item.data.vehicle, item.data.year].filter(Boolean).join(' • ')} image={item.data.cover} href={item.data.externalUrl || `/publicacoes/${item.id}`} external={!!item.data.externalUrl} />)}</div></div></section>
+</BaseLayout>

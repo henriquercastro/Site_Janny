@@ -1,0 +1,7 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ContentCard from '../../components/ContentCard.astro';
+import { getCollection } from 'astro:content';
+const items=(await getCollection('podcasts')).filter(i=>!i.data.draft);
+---
+<BaseLayout title="Podcasts — Janny Castro"><section class="page-hero"><div class="container"><p class="eyebrow">Podcast</p><h1 class="display">Conversas sobre negócios, riscos e mercado</h1><p>Seleção de episódios com participação de Janny Castro, incluindo o Sala de Negócios.</p></div></section><section class="section"><div class="container"><div class="archive-grid">{items.map(item=><ContentCard kicker={item.data.episodeNumber ? `Episódio #${item.data.episodeNumber}` : 'Podcast'} title={item.data.title} meta={item.data.guests} image={item.data.cover} href={item.data.spotifyUrl} external={true} />)}</div></div></section></BaseLayout>
