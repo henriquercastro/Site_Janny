@@ -1,0 +1,172 @@
+media:
+  input: public/images
+  output: /images
+
+content:
+  - name: paginas
+    label: Páginas do site
+    type: group
+    items:
+      - name: home
+        label: Página inicial
+        type: file
+        path: src/data/home.json
+        format: json
+        operations:
+          delete: false
+        fields:
+          - { name: heroEyebrow, label: Chamada pequena do topo, type: string }
+          - { name: heroTitle, label: Nome / título principal, type: string, required: true }
+          - { name: heroRole, label: Áreas de atuação, type: string }
+          - { name: heroText, label: Texto principal, type: text }
+          - { name: heroImage, label: Foto principal, type: image }
+          - { name: heroQuote, label: Frase de destaque, type: text }
+          - { name: trajectoryTitle, label: Título da trajetória, type: string }
+          - { name: trajectoryText1, label: Trajetória - parágrafo 1, type: text }
+          - { name: trajectoryText2, label: Trajetória - parágrafo 2, type: text }
+          - { name: aboutTitle, label: Título - Mercado e academia, type: string }
+          - { name: aboutText, label: Texto - Mercado e academia, type: text }
+          - { name: aboutImage, label: Foto - Mercado e academia, type: image }
+          - { name: contactTitle, label: Título do contato, type: string }
+          - { name: contactText, label: Texto do contato, type: text }
+
+      - name: sobre
+        label: Página Sobre
+        type: file
+        path: src/data/sobre.json
+        format: json
+        operations:
+          delete: false
+        fields:
+          - { name: eyebrow, label: Chamada pequena, type: string }
+          - { name: title, label: Título principal, type: string, required: true }
+          - { name: intro, label: Introdução, type: text }
+          - { name: paragraph1, label: Parágrafo 1, type: text }
+          - { name: paragraph2, label: Parágrafo 2, type: text }
+          - { name: section1Title, label: Título da seção 1, type: string }
+          - { name: section1Paragraph1, label: Seção 1 - parágrafo 1, type: text }
+          - { name: section1Paragraph2, label: Seção 1 - parágrafo 2, type: text }
+          - { name: section2Title, label: Título da seção 2, type: string }
+          - { name: section2Paragraph1, label: Seção 2 - parágrafo 1, type: text }
+          - { name: section2Paragraph2, label: Seção 2 - parágrafo 2, type: text }
+
+      - name: publicacoes_page
+        label: Página Publicações
+        type: file
+        path: src/data/publicacoes-page.json
+        format: json
+        operations:
+          delete: false
+        fields:
+          - { name: eyebrow, label: Chamada pequena, type: string }
+          - { name: title, label: Título, type: string, required: true }
+          - { name: description, label: Texto de apresentação, type: text }
+
+      - name: eventos_page
+        label: Página Eventos
+        type: file
+        path: src/data/eventos-page.json
+        format: json
+        operations:
+          delete: false
+        fields:
+          - { name: eyebrow, label: Chamada pequena, type: string }
+          - { name: title, label: Título, type: string, required: true }
+          - { name: description, label: Texto de apresentação, type: text }
+
+      - name: podcasts_page
+        label: Página Podcasts
+        type: file
+        path: src/data/podcasts-page.json
+        format: json
+        operations:
+          delete: false
+        fields:
+          - { name: eyebrow, label: Chamada pequena, type: string }
+          - { name: title, label: Título, type: string, required: true }
+          - { name: description, label: Texto de apresentação, type: text }
+
+      - name: site
+        label: Contato e identidade
+        type: file
+        path: src/data/site.json
+        format: json
+        operations:
+          delete: false
+        fields:
+          - { name: brandName, label: Nome, type: string, required: true }
+          - { name: tagline, label: Frase da marca, type: string }
+          - { name: email, label: E-mail, type: string }
+          - { name: linkedin, label: LinkedIn, type: string }
+          - { name: footerLine, label: Texto do rodapé, type: string }
+
+  - name: publicacoes
+    label: Publicações
+    type: collection
+    path: src/content/publicacoes
+    operations:
+      create: true
+      rename: false
+      delete: false
+    view:
+      fields: [title, vehicle, category, year, draft]
+      primary: title
+      sort: [year, title]
+    fields:
+      - { name: title, label: Título, type: string, required: true }
+      - { name: type, label: Tipo, type: string }
+      - { name: vehicle, label: Veículo, type: string }
+      - { name: date, label: Data, type: date }
+      - { name: year, label: Ano, type: number }
+      - { name: category, label: Categoria, type: select, options: [Compliance, Riscos, Governança, ESG, Mercado Financeiro, Criptoativos] }
+      - { name: cover, label: Imagem, type: image }
+      - { name: summary, label: Resumo, type: text }
+      - { name: externalUrl, label: Link externo, type: string }
+      - { name: featured, label: Destaque na página inicial, type: boolean, default: false }
+      - { name: draft, label: Rascunho, type: boolean, default: true }
+      - { name: body, label: Conteúdo, type: rich-text }
+
+  - name: eventos
+    label: Eventos
+    type: collection
+    path: src/content/eventos
+    operations:
+      create: true
+      rename: false
+      delete: false
+    view:
+      fields: [title, city, institution, theme, draft]
+      primary: title
+    fields:
+      - { name: title, label: Título, type: string, required: true }
+      - { name: date, label: Data, type: date }
+      - { name: city, label: Cidade, type: string }
+      - { name: institution, label: Instituição, type: string }
+      - { name: theme, label: Tema, type: string }
+      - { name: cover, label: Imagem, type: image }
+      - { name: description, label: Descrição, type: text }
+      - { name: featured, label: Destaque na página inicial, type: boolean, default: false }
+      - { name: draft, label: Rascunho, type: boolean, default: true }
+      - { name: body, label: Conteúdo, type: rich-text }
+
+  - name: podcasts
+    label: Podcasts
+    type: collection
+    path: src/content/podcasts
+    operations:
+      create: true
+      rename: false
+      delete: false
+    view:
+      fields: [title, episodeNumber, guests, draft]
+      primary: title
+    fields:
+      - { name: title, label: Título, type: string, required: true }
+      - { name: episodeNumber, label: Número do episódio, type: number }
+      - { name: guests, label: Participantes, type: string }
+      - { name: date, label: Data, type: date }
+      - { name: cover, label: Imagem, type: image }
+      - { name: spotifyUrl, label: Link do Spotify, type: string, required: true }
+      - { name: featured, label: Destaque na página inicial, type: boolean, default: false }
+      - { name: draft, label: Rascunho, type: boolean, default: true }
+      - { name: body, label: Observações, type: rich-text }

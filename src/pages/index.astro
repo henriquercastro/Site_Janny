@@ -1,18 +1,31 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ContentCard from '../components/ContentCard.astro';
+import { getCollection } from 'astro:content';
+import home from '../data/home.json';
+import site from '../data/site.json';
+
+const publications = (await getCollection('publicacoes')).filter(i => !i.data.draft);
+const events = (await getCollection('eventos')).filter(i => !i.data.draft);
+const podcasts = (await getCollection('podcasts')).filter(i => !i.data.draft);
+
+const publicationDate = (item) => item.data.date ? item.data.date.getTime() : (item.data.year ? new Date(item.data.year, 0, 1).getTime() : 0);
+const recentPublications = [...publications].sort((a,b) => publicationDate(b) - publicationDate(a)).slice(0,4);
+const featuredPublication = publications.find(i => i.data.featured) || recentPublications[0];
+const featuredEvent = events.find(i => i.data.featured) || events[0];
+const featuredPodcast = podcasts.find(i => i.data.featured) || podcasts[0];
 ---
 <BaseLayout title="Janny Castro — Financial Services, Compliance, Riscos e ESG">
   <section class="hero">
     <div class="hero-grid">
       <div class="hero-copy">
-        <p class="eyebrow" style="color:#dac798">Mercado financeiro em perspectiva</p>
-        <h1 class="display">Janny Castro</h1>
-        <div class="hero-role">Financial Services • Compliance • Riscos • Governança • ESG</div>
-        <p class="lead">Experiência prática, visão regulatória e conhecimento compartilhado para compreender os desafios de um mercado financeiro em transformação.</p>
+        <p class="eyebrow" style="color:#dac798">{home.heroEyebrow}</p>
+        <h1 class="display">{home.heroTitle}</h1>
+        <div class="hero-role">{home.heroRole}</div>
+        <p class="lead">{home.heroText}</p>
         <div class="hero-actions"><a class="btn btn-primary" href="/sobre">Conheça minha trajetória →</a><a class="btn btn-outline" href="#conteudos">Ver conteúdos ↗</a></div>
       </div>
-      <div class="hero-photo"><img src="/images/janny-hero.jpg" alt="Janny Castro" /><div class="hero-quote">“Integridade, sustentabilidade e visão estratégica precisam caminhar juntas.”</div></div>
+      <div class="hero-photo"><img src={home.heroImage} alt="Janny Castro" /><div class="hero-quote">“{home.heroQuote}”</div></div>
     </div>
   </section>
 
@@ -21,9 +34,9 @@ import ContentCard from '../components/ContentCard.astro';
       <div class="trajectory-grid">
         <div class="trajectory-copy">
           <p class="eyebrow">Trajetória</p>
-          <h2 class="section-title">Uma trajetória construída por diferentes perspectivas do mercado financeiro</h2>
-          <p>A carreira de Janny Castro acompanha diferentes transformações do setor financeiro brasileiro. Sua experiência começou em funções ligadas à operação, administração de recursos e crédito e avançou para posições de liderança em controles internos, riscos, compliance, ouvidoria, governança e consultoria regulatória.</p>
-          <p>Hoje, como sócia de Financial Services na Forvis Mazars no Brasil, atua em temas relacionados a compliance regulatório, gestão de riscos, auditoria interna, ESG, fundos estruturados, PLD/FT, controles internos e transformação do ambiente financeiro.</p>
+          <h2 class="section-title">{home.trajectoryTitle}</h2>
+          <p>{home.trajectoryText1}</p>
+          <p>{home.trajectoryText2}</p>
           <a class="text-link" href="/sobre">Saiba mais sobre minha trajetória →</a>
         </div>
         <div class="credentials">
@@ -43,9 +56,9 @@ import ContentCard from '../components/ContentCard.astro';
     <div class="container">
       <div class="section-head"><div><p class="eyebrow">Destaques</p><h2 class="section-title">Ideias, análises e conversas que conectam mercado e regulação</h2></div><a class="text-link" href="/publicacoes">Ver todos os conteúdos →</a></div>
       <div class="cards">
-        <ContentCard kicker="Publicação" title="Novas regras para stablecoins e seu impacto no Brasil" meta="Criptoativos • Regulação" image="/images/stablecoins.png" href="https://euqueroinvestir.com/mercados/novas-regras-para-stablecoins-regulacao-deve-reduzir-operacoes-a-curto-prazo" external={true} />
-        <ContentCard kicker="Evento" title="ESG, governança e riscos em debate" meta="Participações e palestras" image="/images/evento-esg-1.jpg" href="/eventos" />
-        <ContentCard kicker="Podcast" title="#217 — Fraudes no mercado de FIDC" meta="Sala de Negócios • com Yuri Macedo" image="/images/podcast-fidc.png" href="https://open.spotify.com/episode/3apLaYA376YKtftnefybcH" external={true} />
+        {featuredPublication && <ContentCard kicker={featuredPublication.data.type || featuredPublication.data.category || 'Publicação'} title={featuredPublication.data.title} meta={[featuredPublication.data.vehicle, featuredPublication.data.year].filter(Boolean).join(' • ')} image={featuredPublication.data.cover} href={featuredPublication.data.externalUrl || `/publicacoes/${featuredPublication.id}`} external={!!featuredPublication.data.externalUrl} />}
+        {featuredEvent && <ContentCard kicker={featuredEvent.data.theme || 'Evento'} title={featuredEvent.data.title} meta={[featuredEvent.data.institution, featuredEvent.data.city].filter(Boolean).join(' • ')} image={featuredEvent.data.cover} href={`/eventos/${featuredEvent.id}`} />}
+        {featuredPodcast && <ContentCard kicker={featuredPodcast.data.episodeNumber ? `Episódio #${featuredPodcast.data.episodeNumber}` : 'Podcast'} title={featuredPodcast.data.title} meta={featuredPodcast.data.guests} image={featuredPodcast.data.cover} href={featuredPodcast.data.spotifyUrl} external={true} />}
       </div>
     </div>
   </section>
@@ -54,10 +67,7 @@ import ContentCard from '../components/ContentCard.astro';
     <div class="container">
       <div class="section-head"><div><p class="eyebrow">Publicações recentes</p><h2 class="section-title">Leituras para acompanhar as mudanças do setor</h2></div><a class="text-link" href="/publicacoes">Todas as publicações →</a></div>
       <div class="publication-grid">
-        <ContentCard kicker="Artigo" title="Intermediação de criptomoedas e regulamentação brasileira" meta="Editora Ithala • 2020" image="/images/conversando-sistema.png" href="/publicacoes/intermediacao-de-criptomoedas" />
-        <ContentCard kicker="Matéria" title="Alta burocracia favorece corrupção de fiscais" meta="PEGN • 03/10/2024" image="/images/burocracia.jpg" href="https://revistapegn.globo.com/negocios/noticia/2024/10/alta-burocracia-favorece-corrupcao-de-fiscais.ghtml" external={true} />
-        <ContentCard kicker="Livro" title="Mulheres em Compliance" meta="Coautoria" image="/images/mulheres-compliance.png" href="/publicacoes" />
-        <ContentCard kicker="Livro" title="Conversando com o Sistema" meta="Coautoria" image="/images/conversando-sistema.png" href="/publicacoes" />
+        {recentPublications.map(item => <ContentCard kicker={item.data.type || item.data.category || 'Publicação'} title={item.data.title} meta={[item.data.vehicle, item.data.year].filter(Boolean).join(' • ')} image={item.data.cover} href={item.data.externalUrl || `/publicacoes/${item.id}`} external={!!item.data.externalUrl} />)}
       </div>
     </div>
   </section>
@@ -66,9 +76,7 @@ import ContentCard from '../components/ContentCard.astro';
     <div class="container">
       <div class="section-head"><div><p class="eyebrow">Eventos e palestras</p><h2 class="section-title">Conhecimento em diálogo com o mercado</h2></div><a class="text-link" href="/eventos">Ver participações →</a></div>
       <div class="cards">
-        <ContentCard kicker="Palestra" title="Riscos, processos e governança" meta="Debates técnicos e eventos do setor" image="/images/evento-esg-1.jpg" href="/eventos" />
-        <ContentCard kicker="Painel" title="ESG e mercado financeiro" meta="Participação como painelista" image="/images/evento-esg-2.jpeg" href="/eventos" />
-        <ContentCard kicker="Evento" title="Compliance, integridade e transformação" meta="Conteúdo aplicado ao mercado" image="/images/evento-esg-3.jpeg" href="/eventos" />
+        {events.slice(0,3).map(item => <ContentCard kicker={item.data.theme || 'Evento'} title={item.data.title} meta={[item.data.institution,item.data.city].filter(Boolean).join(' • ')} image={item.data.cover} href={`/eventos/${item.id}`} />)}
       </div>
     </div>
   </section>
@@ -76,19 +84,18 @@ import ContentCard from '../components/ContentCard.astro';
   <section class="section">
     <div class="container">
       <div class="section-head"><div><p class="eyebrow">Sala de Negócios</p><h2 class="section-title">Conversas sobre negócios, riscos e mercado</h2></div><a class="text-link" href="/podcasts">Todos os episódios →</a></div>
-      <div class="podcast-row">
-        <a class="podcast-feature" href="https://open.spotify.com/episode/3apLaYA376YKtftnefybcH" target="_blank" rel="noreferrer"><img src="/images/podcast-fidc.png" alt="" /><div class="podcast-feature-copy"><div class="card-kicker" style="color:#dac798">Podcast • Episódio #217</div><h3>Fraudes no mercado de FIDC: como minimizar os riscos</h3><p>Janny Castro e Yuri Macedo discutem riscos para investidores e agentes do mercado.</p><strong>Ouvir no Spotify →</strong></div></a>
-        <div class="podcast-list"><div class="podcast-mini"><span class="card-kicker">Sala de Negócios</span><strong>Governança e precificação no setor marítimo</strong><span class="card-meta">#208 • Eduardo de Toledo e Janny Castro</span></div><div class="podcast-mini"><span class="card-kicker">Sala de Negócios</span><strong>Compliance, regulação e novos modelos financeiros</strong><span class="card-meta">Seleção do acervo</span></div><div class="podcast-mini"><span class="card-kicker">Arquivo</span><strong>Mais de 40 participações organizadas para revisão</strong><span class="card-meta">Acervo em migração para o novo site</span></div></div>
+      <div class="cards">
+        {podcasts.slice(0,3).map(item => <ContentCard kicker={item.data.episodeNumber ? `Episódio #${item.data.episodeNumber}` : 'Podcast'} title={item.data.title} meta={item.data.guests} image={item.data.cover} href={item.data.spotifyUrl} external={true} />)}
       </div>
     </div>
   </section>
 
   <section class="about-strip">
-    <div class="about-photo"><img src="/images/janny-hero.jpg" alt="Janny Castro" /></div>
-    <div class="about-copy"><p class="eyebrow">Mercado e academia</p><h2 class="section-title">Experiência de mercado, visão regulatória e conhecimento compartilhado</h2><p>Economista e pós-graduada em Finanças Corporativas pelo Ibmec, Janny combina formação acadêmica, experiência executiva e participação institucional. Sua trajetória passa por operações, crédito, fundos, riscos, compliance, auditoria interna, governança e ESG — sempre conectando os temas ao funcionamento real das organizações.</p><a class="text-link" href="/sobre">Conheça a trajetória completa →</a></div>
+    <div class="about-photo"><img src={home.aboutImage} alt="Janny Castro" /></div>
+    <div class="about-copy"><p class="eyebrow">Mercado e academia</p><h2 class="section-title">{home.aboutTitle}</h2><p>{home.aboutText}</p><a class="text-link" href="/sobre">Conheça a trajetória completa →</a></div>
   </section>
 
   <section class="contact" id="contato">
-    <div class="container contact-grid"><div><p class="eyebrow">Contato</p><h2 class="section-title">Vamos conversar?</h2><p style="color:#59616a">Para convites, palestras, entrevistas e conversas profissionais.</p></div><div class="contact-links"><a class="btn btn-dark" href="mailto:janny.castro@forvismazars.com">E-mail</a><a class="btn" style="border:1px solid var(--line)" href="https://www.linkedin.com/in/jannycastro/" target="_blank" rel="noreferrer">LinkedIn ↗</a></div></div>
+    <div class="container contact-grid"><div><p class="eyebrow">Contato</p><h2 class="section-title">{home.contactTitle}</h2><p style="color:#59616a">{home.contactText}</p></div><div class="contact-links"><a class="btn btn-dark" href={`mailto:${site.email}`}>E-mail</a><a class="btn" style="border:1px solid var(--line)" href={site.linkedin} target="_blank" rel="noreferrer">LinkedIn ↗</a></div></div>
   </section>
 </BaseLayout>

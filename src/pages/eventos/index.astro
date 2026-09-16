@@ -2,6 +2,7 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import ContentCard from '../../components/ContentCard.astro';
 import { getCollection } from 'astro:content';
+import page from '../../data/eventos-page.json';
 const items=(await getCollection('eventos')).filter(i=>!i.data.draft);
 ---
-<BaseLayout title="Eventos — Janny Castro"><section class="page-hero"><div class="container"><p class="eyebrow">Eventos</p><h1 class="display">Palestras, painéis e conversas com o mercado</h1><p>Participações em encontros profissionais e fóruns de discussão sobre compliance, riscos, ESG, governança e mercado financeiro.</p></div></section><section class="section"><div class="container"><div class="archive-grid">{items.map(item=><ContentCard kicker={item.data.theme || 'Evento'} title={item.data.title} meta={[item.data.institution,item.data.city].filter(Boolean).join(' • ')} image={item.data.cover} href={`/eventos/${item.id}`} />)}</div></div></section></BaseLayout>
+<BaseLayout title="Eventos — Janny Castro"><section class="page-hero"><div class="container"><p class="eyebrow">{page.eyebrow}</p><h1 class="display">{page.title}</h1><p>{page.description}</p></div></section><section class="section"><div class="container"><div class="archive-grid">{items.map(item=><ContentCard kicker={item.data.theme || 'Evento'} title={item.data.title} meta={[item.data.institution,item.data.city].filter(Boolean).join(' • ')} image={item.data.cover} href={`/eventos/${item.id}`} />)}</div></div></section></BaseLayout>

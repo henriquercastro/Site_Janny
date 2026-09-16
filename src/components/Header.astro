@@ -1,9 +1,12 @@
+---
+import site from '../data/site.json';
+---
 <header class="site-header">
   <div class="container header-inner">
-    <a class="brand" href="/">Janny Castro<small>Conhecimento que gera valor</small></a>
+    <a class="brand" href="/">{site.brandName}<small>{site.tagline}</small></a>
     <nav class="nav" aria-label="Navegação principal">
       <a href="/sobre">Sobre</a><a href="/publicacoes">Publicações</a><a href="/eventos">Eventos</a><a href="/podcasts">Podcast</a><a href="/#contato">Contato</a>
-      <a class="nav-cta" href="https://www.linkedin.com/in/jannycastro/" target="_blank" rel="noreferrer">LinkedIn ↗</a>
+      <a class="nav-cta" href={site.linkedin} target="_blank" rel="noreferrer">LinkedIn ↗</a>
     </nav>
     <button class="menu-button" aria-label="Abrir menu">Menu</button>
   </div>

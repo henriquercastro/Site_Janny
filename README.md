@@ -34,3 +34,19 @@ O arquivo `.pages.yml` configura as coleções do Pages CMS. A usuária poderá 
 - Revisar títulos/datas do acervo que ainda estavam incompletos no PPT.
 - Substituir screenshots por arquivos originais em maior resolução quando existirem.
 - Revisar direitos/autorização das imagens e logos externos.
+
+## Edição das páginas pelo Pages CMS
+
+Esta versão permite editar também os textos e imagens das páginas existentes, sem mexer em código.
+
+No Pages CMS, abra **Páginas do site** e escolha:
+- **Página inicial** — textos e fotos da Home.
+- **Página Sobre** — biografia e seções de trajetória.
+- **Página Publicações** — título e texto de abertura da página.
+- **Página Eventos** — título e texto de abertura da página.
+- **Página Podcasts** — título e texto de abertura da página.
+- **Contato e identidade** — nome, tagline, e-mail, LinkedIn e rodapé.
+
+Publicações, eventos e podcasts continuam em suas coleções próprias. A Home agora puxa automaticamente os itens marcados como destaque e as publicações recentes.
+
+> O Pages CMS edita o conteúdo. Alterações de layout, cores, componentes e estrutura visual continuam sendo feitas no código do site.
