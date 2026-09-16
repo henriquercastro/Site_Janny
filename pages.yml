@@ -1,0 +1,61 @@
+media:
+  input: public/images
+  output: /images
+
+content:
+  - name: publicacoes
+    label: Publicações
+    type: collection
+    path: src/content/publicacoes
+    view:
+      fields: [title, vehicle, category, year, draft]
+      primary: title
+      sort: [year, title]
+    fields:
+      - { name: title, label: Título, type: string, required: true }
+      - { name: type, label: Tipo, type: string }
+      - { name: vehicle, label: Veículo, type: string }
+      - { name: date, label: Data, type: date }
+      - { name: year, label: Ano, type: number }
+      - { name: category, label: Categoria, type: select, options: [Compliance, Riscos, Governança, ESG, Mercado Financeiro, Criptoativos] }
+      - { name: cover, label: Imagem, type: image }
+      - { name: summary, label: Resumo, type: text }
+      - { name: externalUrl, label: Link externo, type: string }
+      - { name: featured, label: Destaque, type: boolean, default: false }
+      - { name: draft, label: Rascunho, type: boolean, default: true }
+      - { name: body, label: Conteúdo, type: rich-text }
+  - name: eventos
+    label: Eventos
+    type: collection
+    path: src/content/eventos
+    view:
+      fields: [title, city, institution, theme, draft]
+      primary: title
+    fields:
+      - { name: title, label: Título, type: string, required: true }
+      - { name: date, label: Data, type: date }
+      - { name: city, label: Cidade, type: string }
+      - { name: institution, label: Instituição, type: string }
+      - { name: theme, label: Tema, type: string }
+      - { name: cover, label: Imagem, type: image }
+      - { name: description, label: Descrição, type: text }
+      - { name: featured, label: Destaque, type: boolean, default: false }
+      - { name: draft, label: Rascunho, type: boolean, default: true }
+      - { name: body, label: Conteúdo, type: rich-text }
+  - name: podcasts
+    label: Podcasts
+    type: collection
+    path: src/content/podcasts
+    view:
+      fields: [title, episodeNumber, guests, draft]
+      primary: title
+    fields:
+      - { name: title, label: Título, type: string, required: true }
+      - { name: episodeNumber, label: Número do episódio, type: number }
+      - { name: guests, label: Participantes, type: string }
+      - { name: date, label: Data, type: date }
+      - { name: cover, label: Imagem, type: image }
+      - { name: spotifyUrl, label: Link do Spotify, type: string, required: true }
+      - { name: featured, label: Destaque, type: boolean, default: false }
+      - { name: draft, label: Rascunho, type: boolean, default: true }
+      - { name: body, label: Observações, type: rich-text }
